@@ -1,20 +1,26 @@
-const express = require('express');
-const path = require('path');
+import React from 'react';
+// import CSVImport from './components/CSVImport';
+// import TableEditor from './components/TableEditor';
+// import UserComponent from './components/UserComponent';
+import LoginComponent from './components/LoginComponent';
 
-const app = express();
-const port = process.env.PORT || 3000;
+const App = () => {
+  return (
+    <div>
+      
+      {/* Your existing component for displaying items */}
+      {/* ... */}
 
-// Serve static files from the 'build' directory
-app.use(express.static(path.join(__dirname, './client/build')));
+      {/* Add the CSV import component */}
+      {/* <CSVImport />
+      <TableEditor />
+      <UserComponent /> */}
+      <LoginComponent />
 
-// Define any other API routes or middleware here
 
-// Catch-all route to serve 'index.html' for any unrecognized routes
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/build', 'index.html'));
-});
+    
+    </div>
+  );
+};
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+export default App;

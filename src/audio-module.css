@@ -7,7 +7,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
+  
   padding-top: 80px; /* height of the title bar */
   box-sizing: border-box;
 }
@@ -26,10 +26,6 @@ body {
   z-index: 100;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
   border-bottom: 3px solid #00ff00;
-}
-
-#audio {
-  display: none;
 }
 
 .title-bar h1 {

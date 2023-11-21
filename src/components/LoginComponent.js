@@ -26,7 +26,10 @@ const LoginComponent = () => {
       const response = await axios.post('http://localhost:5000/api/login', { user_id, password });
       const authToken = response.data.token;
       const userRole = response.data.role
-      const userIdFromServer = response.data.user_id;;
+      const userIdFromServer = response.data.user_id;
+      localStorage.setItem('authToken', authToken);
+      localStorage.setItem('userRole', userRole);
+      localStorage.setItem('user_id', userIdFromServer);
   
       Cookies.set('authToken', authToken, { expires: 1, path: '/' });
       Cookies.set('userRole', userRole, { expires: 1, path: '/' });
@@ -49,7 +52,9 @@ const LoginComponent = () => {
       // const user_id = Cookies.get('user_id');
       // Make a call to the logout endpoint on the server
       await axios.post('http://localhost:5000/api/logout', { user_id });
-      
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('user_id');
       
   
       // Remove the cookies and clear the state

@@ -7,20 +7,16 @@ const TableEditor = () => {
   const [tableData, setTableData] = useState([]);
   const [message, setMessage] = useState('');
 
-  // Load the initial state from local storage on component mount
   useEffect(() => {
     const storedTables = JSON.parse(localStorage.getItem('tables')) || [];
     setTables(storedTables);
   }, []);
 
-  // Fetch the list of tables from the server on component mount
   useEffect(() => {
     const fetchTables = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/tables');
         setTables(response.data.tables);
-
-        // Save the tables to local storage
         localStorage.setItem('tables', JSON.stringify(response.data.tables));
       } catch (error) {
         console.error('Error fetching tables:', error.message);
@@ -30,7 +26,6 @@ const TableEditor = () => {
     fetchTables();
   }, []);
 
-  // Fetch table data when the selected table changes
   useEffect(() => {
     const fetchTableData = async () => {
       try {
@@ -48,17 +43,30 @@ const TableEditor = () => {
 
   const handleTableSelect = (e) => {
     setSelectedTable(e.target.value);
-    setTableData([]); // Clear table data when a new table is selected
+    setTableData([]);
   };
 
   const handleSaveChanges = async () => {
     try {
-      // Send edited data to the server
       const response = await axios.post(`http://localhost:5000/api/save-changes/${selectedTable}`, { tableData });
       setMessage(response.data.message);
     } catch (error) {
       console.error('Error saving changes:', error.message);
       setMessage('Error saving changes. Please try again.');
+    }
+  };
+
+  const handleDeleteTable = async () => {
+    try {
+      const response = await axios.delete(`http://localhost:5000/api/delete-table/${selectedTable}`);
+      setMessage(response.data.message);
+      setSelectedTable('');
+      setTableData([]);
+      setTables(response.data.tables);
+      localStorage.setItem('tables', JSON.stringify(response.data.tables));
+    } catch (error) {
+      console.error('Error deleting table:', error.message);
+      setMessage('Error deleting table. Please try again.');
     }
   };
 
@@ -115,6 +123,7 @@ const TableEditor = () => {
             </tbody>
           </table>
           <button onClick={handleSaveChanges}>Save Changes</button>
+          <button onClick={handleDeleteTable}>Delete Table</button>
           {message && <p>{message}</p>}
         </div>
       )}
