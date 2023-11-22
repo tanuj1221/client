@@ -9,7 +9,7 @@ const UserComponent = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/users');
+        const response = await axios.get('http://43.204.237.196:5000/api/users');
         setUsers(response.data.users);
       } catch (error) {
         console.error('Error fetching users:', error.message);
@@ -21,7 +21,7 @@ const UserComponent = () => {
 
   const handleAddUser = async () => {
     try {
-      await axios.post('http://localhost:5000/api/users', { role, password });
+      await axios.post('http://43.204.237.196:5000/api/users', { role, password });
       setRole('');
       setPassword('');
       window.location.reload(); // Refresh the user list after adding a new user

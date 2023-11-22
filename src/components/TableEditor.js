@@ -15,7 +15,7 @@ const TableEditor = () => {
   useEffect(() => {
     const fetchTables = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/tables');
+        const response = await axios.get('http://43.204.237.196:5000/api/tables');
         setTables(response.data.tables);
         localStorage.setItem('tables', JSON.stringify(response.data.tables));
       } catch (error) {
@@ -30,7 +30,7 @@ const TableEditor = () => {
     const fetchTableData = async () => {
       try {
         if (selectedTable) {
-          const response = await axios.get(`http://localhost:5000/api/table-data/${selectedTable}`);
+          const response = await axios.get(`http://43.204.237.196:5000/api/table-data/${selectedTable}`);
           setTableData(response.data.tableData);
         }
       } catch (error) {
@@ -48,7 +48,7 @@ const TableEditor = () => {
 
   const handleSaveChanges = async () => {
     try {
-      const response = await axios.post(`http://localhost:5000/api/save-changes/${selectedTable}`, { tableData });
+      const response = await axios.post(`http://43.204.237.196:5000/api/save-changes/${selectedTable}`, { tableData });
       setMessage(response.data.message);
     } catch (error) {
       console.error('Error saving changes:', error.message);
@@ -58,7 +58,7 @@ const TableEditor = () => {
 
   const handleDeleteTable = async () => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/delete-table/${selectedTable}`);
+      const response = await axios.delete(`http://43.204.237.196:5000/api/delete-table/${selectedTable}`);
       setMessage(response.data.message);
       setSelectedTable('');
       setTableData([]);

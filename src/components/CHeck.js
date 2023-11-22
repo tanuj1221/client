@@ -1,129 +1,145 @@
-import React, { useEffect, useRef, useState } from "react";
-import '../audio-module.css';
-import visualGif from '../images/visual.gif';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Cookies from 'js-cookie';
-import Congratulations from './NewAudio';
+import CSVImport from './CSVImport';
+import TableEditor from './TableEditor';
+// import AudioPlayer from './Audio';
+import ExamInformation from './Info'
+// import Instructions from './Introduction';
+import '../style.css'
+import logo from '../images/GCC-TBC.png';
+import DeleteUserDataButton from './Delete'
 
-function AudioPlayer() {
-  const audioRef = useRef(null);
-  const [percentage, setPercentage] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [gifKey, setGifKey] = useState(0);
-  const [audioEnded, setAudioEnded] = useState(false);
-  const [countdown, setCountdown] = useState(120); // Set countdown to 2 minutes (120 seconds)
+
+const LoginComponent = () => {
+  const [user_id, setUser_id] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('');
+  const [token, setToken] = useState('');
+  const [render, setRender] = useState(false); // initialize a dummy state
+
+  const forceUpdate = () => setRender(!render); // toggle the state to force render
+
+  useEffect(() => {
+    const authToken = Cookies.get('authToken');
+    const userRole = Cookies.get('userRole');
+    if (authToken) {
+      setToken(authToken);
+      setRole(userRole);
+    }
+  }, []);
   
-  const fetchData = async () => {
+  const handleLogin = async () => {
     try {
-        const user_id = Cookies.get('user_id');
-        const response = await fetch(`http://localhost:5000/api/audio/${user_id}`);
-        console.log(response);
-        if (response.ok) {
-            const data = await response.json();
-            const audioLink = data.link;
-            audioRef.current.src = audioLink;
-        } else {
-            console.error('Failed to fetch audio link:', response.status);
-        }
+      const response = await axios.post('http://localhost:5000/api/login', { user_id, password });
+      const authToken = response.data.token;
+      const userRole = response.data.role;
+      const userIdFromServer = response.data.user_id;
+      localStorage.setItem('authToken', authToken);
+      localStorage.setItem('userRole', userRole);
+      localStorage.setItem('user_id', userIdFromServer);
+  
+      Cookies.set('authToken', authToken, { expires: 1, path: '/' });
+      Cookies.set('userRole', userRole, { expires: 1, path: '/' });
+      Cookies.set('user_id', userIdFromServer, { expires: 1, path: '/' });
+  
+      // Wait for states to update
+      await Promise.all([setToken(authToken), setRole(userRole)]);
+  
+      // setUser_id('');
+      // setPassword('');
     } catch (error) {
-        console.error('Error fetching audio link:', error);
+      console.error('Error logging in:', error.message);
     }
   };
-
-  const handleLoadedMetadata = () => {
-    if (isPlaying) {
-        audioRef.current.play();
-    }
-  };
-
-  const handleAudioEnd = () => {
-    setAudioEnded(true);
-    alert('Audio has ended');
-  };
-
-  const updateStatus = async () => {
-    const user_id = Cookies.get('user_id');
-    console.log("status updated")
+  
+  const handleLogout = async () => {
     try {
-        const response = await fetch(`http://localhost:5000/api/exuser/${user_id}`, {
-            method: 'PUT',
-        });
-
-        if (!response.ok) {
-            console.error('Failed to update status:', response.status);
-        }
+      const user_id = Cookies.get('user_id');
+      // const user_id = Cookies.get('user_id');
+      // Make a call to the logout endpoint on the server
+      await axios.post('http://localhost:5000/api/logout', { user_id });
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('user_id');
+      
+  
+      // Remove the cookies and clear the state
+      Cookies.remove('authToken');
+      Cookies.remove('userRole');
+      setToken('');
+      setRole('');
+      
+      
     } catch (error) {
-        console.error('Error updating status:', error);
+      console.error('Error logging out:', error.message);
     }
   };
-
-  const startPlaying = () => {
-    if (!audioRef.current.paused) {
-        return;
-    }
-    audioRef.current.play();
-    setIsPlaying(true);
-    setGifKey(prevKey => prevKey + 1);
-    updateStatus();
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    const updateProgressBar = () => {
-      setPercentage(Math.floor((100 / audio.duration) * audio.currentTime));
-    };
-
-    audio.addEventListener('timeupdate', updateProgressBar);
-    audio.addEventListener('ended', handleAudioEnd);
-
-    return () => {
-      audio.removeEventListener('timeupdate', updateProgressBar);
-      audio.removeEventListener('ended', handleAudioEnd);
-    };
-  }, []);
-
-  useEffect(() => {
-    let countdownInterval;
-    if(audioEnded && countdown > 0) {
-        countdownInterval = setInterval(() => {
-            setCountdown(prevCountdown => prevCountdown - 1);
-        }, 1000);
-    } else if (countdown === 0) {
-        clearInterval(countdownInterval);
-    }
-    return () => clearInterval(countdownInterval);
-  }, [audioEnded, countdown]);
-
-  if (countdown === 0) {
-    return <Congratulations />; // Render Congratulations component when countdown ends
-  }
 
   return (
-    <div className="container">
-      {audioEnded &&
-          <div className="overlay">
-            <div className="countdown">Next Audio in : {Math.floor(countdown/60)}:{countdown%60 < 10 ? '0'+countdown%60 : countdown%60}</div>
+    <div>
+      {token ? (
+        <div>
+          <h2>User Management</h2>
+          <button onClick={handleLogout}>Logout</button>
+          {role === 'user' && (
+            <div>
+            <h3>User Add</h3>
+        
+            <ExamInformation />
           </div>
-      }
-      <div className="audio-player">
-        <audio id="audio" ref={audioRef} src="" preload="metadata"></audio>
-
-        <div className="audio-controls">
-          <div id="play-pause" className="play" onClick={startPlaying}>
-            {isPlaying ? '⏸️' : '▶️'}
+            
+          )}
+          {role === 'admin' && (
+            <div>
+              <h3>CSV Import</h3>
+              <CSVImport />
+            </div>
+          )}
+          {role === 'superadmin' && (
+            
+            <div>
+            <h3>CSV Import</h3>
+            <CSVImport />
+            <h3>Table Editor</h3>
+            <TableEditor />
+            <h3>User Add</h3>
+            <DeleteUserDataButton />
+            
           </div>
-          <div className="audio-progress">
-            <progress id="progress-bar" max="100" value={percentage}></progress>
-            <div id="percentage">{percentage}%</div>
+          )}
+        </div>
+      ) : (
+        <div>
+          <div className="box">
+            <span className="borderLine"></span>
+            <form>
+              <img className="logo" src={logo} alt="Logo" />
+              <h2>Sign In</h2>
+              <div className="inputBox">
+                <input type="text" required="required" value={user_id} onChange={(e) => setUser_id(e.target.value)} />
+                <span>Username</span>
+                <i></i>
+              </div>
+              <div className="inputBox">
+                <input type="password" required="required" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <span>Password</span>
+                <i></i>
+              </div>
+              <div className="links">
+                {/* <a >Having Trouble?</a>
+                <a>Contact Administrator</a> */}
+              </div>
+              <input type="submit" value="Login" onClick={handleLogin} />
+            </form>
+          </div>
+          <div className="copyright">
+            &copy; 2023
           </div>
         </div>
-        {isPlaying && <img key={gifKey} id="visualizer" src={visualGif} alt="Audio visualizer" />}
-      </div>
+      )}
     </div>
   );
-}
+};
 
-export default AudioPlayer;
+export default LoginComponent;
