@@ -3,6 +3,7 @@ import '../audio-module.css';
 import visualGif from '../images/visual.gif';
 import Cookies from 'js-cookie';
 import AudioPlayerMain from './Audio'; // Adjust the path as needed
+import logo from '../images/GCC-TBC.png';
 
 function AudioPlayer() {
     const audioRef = useRef(null);
@@ -10,7 +11,7 @@ function AudioPlayer() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [showMessageBox, setShowMessageBox] = useState(false);
     const [showAudioPlayerMain, setShowAudioPlayerMain] = useState(false);
-    
+    const [reload, setReload] = useState(false); // new state variable
 
     useEffect(() => {
         const UserId =  Cookies.get('user_id'); // replace 'your_user_id' with the actual UserId
@@ -56,10 +57,9 @@ function AudioPlayer() {
         setIsPlaying(true);
         setShowMessageBox(false);
     };
-
     const handleMessageBoxResponse = async (response) => {
         console.log(`User responded: ${response}`);
-
+    
         if (response === 'yes') {
             setShowMessageBox(false);
             setShowAudioPlayerMain(true);
@@ -83,10 +83,19 @@ function AudioPlayer() {
               
         } else if (response === 'no') {
             const audio = audioRef.current;
-            audio.currentTime = 0;
-            audio.play();
-            setShowMessageBox(false);
+            if (audio){
+                audio.currentTime = 0;
+                audio.play();
+                setPercentage(0);
+                setIsPlaying(true)
+                
+               
+                
+            }
+            
+            setShowMessageBox(false); // Hide the message box while the audio is playing again
         }
+        // No need to setShowMessageBox(true) here
     };
 
     return (
@@ -105,7 +114,16 @@ function AudioPlayer() {
                 ) : (
                     <div>
                         <div className="title-bar">
-                            <h1>Audio Session</h1>
+                            <div className="info-title">
+                            <img src={logo} alt="GCC-TBC" />
+                            </div>
+                            <h1>
+                            MSCE Pune
+                            Online Exam
+                            </h1>
+                        </div>
+                        <div className="title-bar">
+                            <h1>Testing Audio Session</h1>
                         </div>
                         {/* ... (other components and JSX) */}
                         <div className="audio-player">

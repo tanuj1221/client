@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import '../after-login.css'; 
+// import '../after-login.css'; 
 import Instructions from './Introduction';
 import Cookies from 'js-cookie';
+import logo from '../images/GCC-TBC.png';
 
 
 const ExamInformation = () => {
@@ -9,9 +10,10 @@ const ExamInformation = () => {
   const [showNextComponent, setShowNextComponent] = useState(false);
   const [examInfo, setExamInfo] = useState(null); // Initialize with null for better conditional rendering
   const [loading, setLoading] = useState(true);
+  const UserId = Cookies.get('user_id');
 
   useEffect(() => {
-    const UserId = Cookies.get('user_id');
+    
 
     const fetchData = async () => {
       try {
@@ -34,7 +36,7 @@ const ExamInformation = () => {
     };
 
     fetchData();
-  }, []); // Add UserId to the dependency array
+    }, [UserId]); // Add UserId to the dependency array
 
   const handleProceed = async () => {
     if (isChecked) {
@@ -74,7 +76,7 @@ const ExamInformation = () => {
         <div>
           <div className="title-bar">
             <div className="info-title">
-              <img src="./GCC-TBC.png" alt="GCC-TBC" />
+              <img src={logo} alt="GCC-TBC" />
             </div>
             <h1>
               MSCE Pune

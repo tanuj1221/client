@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../instructions.css'; 
 import AudioPlayer from './TestAudio'; // Replace this with the actual component
 import Cookies from 'js-cookie';
+import logo from '../images/GCC-TBC.png';
 
 const Instructions = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -57,7 +58,7 @@ const Instructions = () => {
         <div>
           <div className="title-bar">
             <div className="info-title">
-              <img src="./GCC-TBC.png" alt="GCC-TBC" />
+              <img src={logo} alt="GCC-TBC" />
             </div>
             <h1>MSCE Pune Online Exam</h1>
           </div>

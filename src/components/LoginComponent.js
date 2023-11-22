@@ -9,7 +9,7 @@ import ExamInformation from './Info'
 import '../style.css'
 import logo from '../images/GCC-TBC.png';
 import DeleteUserDataButton from './Delete'
-
+import CookieConsent from './Cookies';
 
 const LoginComponent = () => {
   const [user_id, setUser_id] = useState('');
@@ -29,9 +29,11 @@ const LoginComponent = () => {
     }
   }, []);
   
-  const handleLogin = async () => {
+  const handleLogin = async (event) => {
+    event.preventDefault();
     try {
       const response = await axios.post('http://43.204.237.196:5000/api/login', { user_id, password });
+      
       const authToken = response.data.token;
       const userRole = response.data.role;
       const userIdFromServer = response.data.user_id;
@@ -44,7 +46,8 @@ const LoginComponent = () => {
       Cookies.set('user_id', userIdFromServer, { expires: 1, path: '/' });
   
       // Wait for states to update
-      await Promise.all([setToken(authToken), setRole(userRole)]);
+      setToken(authToken);
+      setRole(userRole);
   
       // setUser_id('');
       // setPassword('');
@@ -80,11 +83,12 @@ const LoginComponent = () => {
     <div>
       {token ? (
         <div>
-          <h2>User Management</h2>
+           <CookieConsent />
+
           <button onClick={handleLogout}>Logout</button>
           {role === 'user' && (
             <div>
-            <h3>User Add</h3>
+           
         
             <ExamInformation />
           </div>
@@ -113,15 +117,15 @@ const LoginComponent = () => {
         <div>
           <div className="box">
             <span className="borderLine"></span>
-            <form>
+            <form  >
               <img className="logo" src={logo} alt="Logo" />
               <h2>Sign In</h2>
-              <div className="inputBox">
+              <div id='inputBox' className="inputBox">
                 <input type="text" required="required" value={user_id} onChange={(e) => setUser_id(e.target.value)} />
                 <span>Username</span>
                 <i></i>
               </div>
-              <div className="inputBox">
+              <div id='inputPass' className="inputBox">
                 <input type="password" required="required" value={password} onChange={(e) => setPassword(e.target.value)} />
                 <span>Password</span>
                 <i></i>
@@ -130,7 +134,7 @@ const LoginComponent = () => {
                 {/* <a >Having Trouble?</a>
                 <a>Contact Administrator</a> */}
               </div>
-              <input type="submit" value="Login" onClick={handleLogin} />
+              <input type="submit" value="Login" onClick={handleLogin}/>
             </form>
           </div>
           <div className="copyright">

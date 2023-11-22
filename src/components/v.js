@@ -4,8 +4,6 @@ import Cookies from 'js-cookie';
 import CSVImport from './CSVImport';
 import TableEditor from './TableEditor';
 import AudioPlayer from './Audio';
-import "../style.css"
-import logo from '../images/GCC-TBC.png';
 
 
 const LoginComponent = () => {
@@ -28,10 +26,7 @@ const LoginComponent = () => {
       const response = await axios.post('http://localhost:5000/api/login', { user_id, password });
       const authToken = response.data.token;
       const userRole = response.data.role
-      const userIdFromServer = response.data.user_id;
-      localStorage.setItem('authToken', authToken);
-      localStorage.setItem('userRole', userRole);
-      localStorage.setItem('user_id', userIdFromServer);
+      const userIdFromServer = response.data.user_id;;
   
       Cookies.set('authToken', authToken, { expires: 1, path: '/' });
       Cookies.set('userRole', userRole, { expires: 1, path: '/' });
@@ -54,9 +49,7 @@ const LoginComponent = () => {
       // const user_id = Cookies.get('user_id');
       // Make a call to the logout endpoint on the server
       await axios.post('http://localhost:5000/api/logout', { user_id });
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('userRole');
-      localStorage.removeItem('user_id');
+      
       
   
       // Remove the cookies and clear the state
@@ -84,7 +77,7 @@ const LoginComponent = () => {
               <h3>Table Editor</h3>
               <TableEditor />
               <h3>User Add</h3>
-              
+              <AudioPlayer />
             </div>
           )}
           {role === 'admin' && (
@@ -101,43 +94,23 @@ const LoginComponent = () => {
           )}
         </div>
       ) : (
-        <div className="box">
-        <span className="borderLine"></span>
-        <form>
-            <img className="logo" src={logo} alt="Logo" />
-            <h2>Sign In</h2>
-            <div className="inputBox">
-                <input 
-                    type="text" 
-                    id="user_id" 
-                    value={user_id} 
-                    onChange={(e) => setUser_id(e.target.value)} 
-                    required 
-                />
-                <span>Username or Seat Number</span>
-                <i></i>
-            </div>
-            <div className="inputBox">
-                <input
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                <span>Password</span>
-                <i></i>
-            </div>
-            <div className="links">
-                <a href="#">Having Trouble?</a>
-                <a href="#">Contact Administrator</a>
-            </div>
-            
-            {/* <button onClick={handleLogin}>Login</button> */}
-            <input onClick={handleLogin} type="submit" value="Login"/>
-
-        </form>
-    </div>
+        <div>
+          <h2>Login</h2>
+          <div>
+            <label htmlFor="user_id">User ID:</label>
+            <input type="text" id="user_id" value={user_id} onChange={(e) => setUser_id(e.target.value)} />
+          </div>
+          <div>
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <button onClick={handleLogin}>Login</button>
+        </div>
       )}
     </div>
   );

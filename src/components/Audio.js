@@ -3,6 +3,7 @@ import '../audio-module.css';
 import visualGif from '../images/visual.gif';
 import Cookies from 'js-cookie';
 import NewAudio from './NewAudio';
+import logo from '../images/GCC-TBC.png';
 
 function AudioPlayerMain() {
   const audioRef = useRef(null);
@@ -200,9 +201,14 @@ function AudioPlayerMain() {
           <div className="countdown">Next Audio in : {Math.floor(countdown / 60)}:{countdown % 60 < 10 ? '0' + countdown % 60 : countdown % 60}</div>
         </div>
       }
+      
+      
     <div className="title-bar">
-        <h1>Audio Session</h1>
+      
+      
+        <h1>Audio Sessio Passage1</h1>
     </div>
+    
     <div className="student-info">
         <div className="student-photo">
             {/* Student photo here */}

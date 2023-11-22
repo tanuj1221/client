@@ -159,7 +159,7 @@ if (audioEnded) {
   return (
     <div className="container">
       <div className="title-bar">
-        <h1>Audio Session</h1>
+        <h1>Audio Session passage 2</h1>
       </div>
       <div className="student-info">
         <div className="student-photo">
