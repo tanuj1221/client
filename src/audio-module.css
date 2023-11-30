@@ -8,7 +8,7 @@ body {
   align-items: center;
   justify-content: center;
   
-  padding-top: 80px; /* height of the title bar */
+  /* padding-top: 120px; height of the title bar */
   box-sizing: border-box;
 }
 
@@ -17,15 +17,16 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 80px;
-  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-  color: #fff;
+  height: 120px;
+  background: linear-gradient(to right, #f8f9fa, #e9ecef, #dee2e6);
+  color: #000;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 100;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-  border-bottom: 3px solid #00ff00;
+  border-bottom: 3px solid #6c757d;
+  gap: 10px;
 }
 
 .title-bar h1 {
@@ -44,18 +45,19 @@ body {
   right: 0;
   bottom: -10px;
   height: 1px;
-  background-color: #00ff00;
+  background-color: #6c757d;
 }
-
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: auto;
+  margin-top: 140px; /* Add margin-top equal to the height of the title bar */
   background: linear-gradient(to bottom, #bdc3c7 0%, #ecf0f1 100%);
   border: 1px solid #bdc3c7;
   border-radius: 10px;
 }
+
 
 /* Body end============================================== */
 
@@ -214,6 +216,62 @@ body {
 }
 /* Overlay code ===================================*/
 
+/* Yes and No buttons ============================*/
+.message-box {
+  background-color: #ecf0f1; /* Same as `student-info` container */
+  border-radius: 20px; /* Same as `student-info` container */
+  padding: 20px; /* Add some padding to give some space inside the container */
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+  width: 25rem; /* Adjust to your needs */
+  text-align: center; /* Center the text */
+  margin: auto; /* Center the box */
+}
+
+.message-box p {
+  font-family: 'Roboto', sans-serif;
+  color: #2c3e50; /* Text color */
+  font-size: 1.2em;
+  margin-bottom: 1em;
+}
+
+.message-box-options {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Space between buttons */
+}
+
+.message-box-options button {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1em;
+}
+
+.message-box-options .yes-button {
+  background-color: #27ae60;
+}
+
+.message-box-options .no-button {
+  background-color: #c0392b;
+}
+
+.message-box-options .yes-button:hover {
+  background-color: #2ecc71;
+}
+
+.message-box-options .no-button:hover {
+  background-color: #e74c3c;
+}
+
+
+
+/* Yes and No buttons end ============================*/
+
 /* Responsive code =================================*/
 
 @media (max-width: 470px) {
@@ -246,33 +304,36 @@ body {
   }
 }
 
-@media (max-width: 340px) {
+@media (max-width: 360px) {
 
-    .container{
-    width: 90vw;
+  .container{
+    width: 88vw; /* reduced from 90vw */
   }
+  
   .student-info{
-    width: 75vw;
+    width: 73vw; /* reduced from 75vw */
   }
   
   .student-details {
     margin-left: 0rem;
   }
-
+  
   .student-name {
     font-size: 0.9em;
   }
-
+  
   #percentage{
     font-size: 0.5em;
   }
   
   .instruction{
-    width: 75vw;
+    width: 73vw; /* reduced from 75vw */
   }
   
   .audio-player {
-    width: 80vw;
+    width: 78vw; /* reduced from 80vw */
   }
 
 }
+
+

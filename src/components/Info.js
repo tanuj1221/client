@@ -17,14 +17,14 @@ const ExamInformation = () => {
 
     const fetchData = async () => {
       try {
-        const response1 = await fetch(`http://43.204.237.196:5000/api/infolog1/${UserId}`);
+        const response1 = await fetch(`http://65.1.107.69:5000/api/infolog1/${UserId}`);
         const data1 = await response1.json();
 
         if (data1.data === 'yes') {
           setShowNextComponent(true);
         }
 
-        const response2 = await fetch(`http://43.204.237.196:5000/api/info/${UserId}`);
+        const response2 = await fetch(`http://65.1.107.69:5000/api/info/${UserId}`);
         const data2 = await response2.json();
         
         setExamInfo(data2);
@@ -49,7 +49,7 @@ const ExamInformation = () => {
           user_id: UserId,
           information: `Proceed button clicked at ${dateTime}`
         };
-        await fetch(`http://43.204.237.196:5000/api/infolog`, {
+        await fetch(`http://65.1.107.69:5000/api/infolog`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(logInfo)

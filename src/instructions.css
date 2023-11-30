@@ -6,8 +6,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  padding-top: 80px; /* height of the title bar */
   box-sizing: border-box;
 }
 .title-bar {
@@ -88,8 +86,8 @@ body {
 .start-time {
   font-family: 'Roboto', sans-serif;
   color: black;
-  font-size: 16px;
-  margin: 10px 0;
+  font-size: 0.8rem;
+  margin: 5px 0;
   font-weight: bold;
 }
 
@@ -129,9 +127,7 @@ body {
     align-items: center;
   }
   
-  .info-left {
-    margin-right: 10px; /* This creates a gap between the two inner containers */
-  }
+
   
   .small-text-field {
     background-color: #f6f6f6;
@@ -255,7 +251,7 @@ body {
     .information .exam-date,
     .information .start-time,
     .information .end-time {
-        font-size: 0.5em; /* Adjust this to the size you want */
+        font-size: 0.7rem; /* Adjust this to the size you want */
     }
     .student-info{
       width: 65vw;
@@ -273,7 +269,9 @@ body {
     .info-container p{
       font-size: 0.9em; /* Adjust this to the size you want */
     }
-
+    .info-left, .info-right {
+      font-size: 0.7rem;
+    }
     .proceed-button {
       font-size: 0.6em; /* Adjust this to the size you want */
     }

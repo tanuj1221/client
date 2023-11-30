@@ -12,53 +12,91 @@ function AudioPlayerMain() {
   const [gifKey, setGifKey] = useState(0);
   const [audioEnded, setAudioEnded] = useState(false);
   const [countdown, setCountdown] = useState(10); // Set countdown to 2 minutes (120 seconds)
+  const [showPlayButton, setShowPlayButton] = useState(true); // Added state to control play button visibility
 
-  const fetchData = async () => {
-    try {
-      const user_id = Cookies.get('user_id');
-      const response = await fetch(`http://43.204.237.196:5000/api/audio/${user_id}`);
-      console.log(response);
-      if (response.ok) {
-        const data = await response.json();
-        const audioLink = data.link;
-        audioRef.current.src = audioLink;
-      } else {
-        console.error('Failed to fetch audio link:', response.status);
+
+   
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    const playAudio = () => {
+ 
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            // Playback started successfully
+            setIsPlaying(true);
+          })
+          .catch(error => {
+            // Auto-play was prevented
+            setIsPlaying(false);
+            console.error('Auto-play prevented:', error);
+          });
       }
-    } catch (error) {
-      console.error('Error fetching audio link:', error);
-    }
-  };
+    };
+
+    audio.addEventListener('ended', () => {
+      setIsPlaying(false);
+      setAudioEnded(true);
+    });
+
+    playAudio();
+
+    return () => {
+      audio.removeEventListener('ended', () => {
+        setIsPlaying(false);
+        setAudioEnded(true);
+      });
+    };
+  }, []);
+
   
-  const fetchData1 = async () => {
-    try {
-      const user_id = Cookies.get('user_id');
-      const response = await fetch(`http://43.204.237.196:5000/api/audio/${user_id}`);
-      console.log(response);
-      if (response.ok) {
-        const data = await response.json();
-        const audioLink = data.link;
-        audioRef.current.src = audioLink;
-  
-        // Fetch last_played_position
-        const userResponse = await fetch(`http://43.204.237.196:5000/api/exuser2/${user_id}`);
-        const userData = await userResponse.json();
-        const lastPlayedPositionPercentage = userData.last_played_position;
-  
-        if (lastPlayedPositionPercentage < 97) { // If less than 97% of the audio was played
-          const resumeTime = audioRef.current.duration * (lastPlayedPositionPercentage / 100); // Calculate the time to resume
-          audioRef.current.currentTime = resumeTime; // Set the current time of the audio
+  useEffect(() => {
+    const fetchData1 = async () => {
+      try {
+        const user_id = Cookies.get('user_id');
+        const response = await fetch(`http://65.1.107.69:5000/api/audio/${user_id}`);
+        console.log(response);
+        
+        if (response.ok) {
+          const data = await response.json();
+          const audioLink = data.link;
+          audioRef.current.src = audioLink;
+    
+          // Fetch last_played_position
+          const userResponse = await fetch(`http://65.1.107.69:5000/api/exuser2/${user_id}`);
+          const userData = await userResponse.json();
+          const lastPlayedPositionPercentage = userData.last_played_position;
+    
+          if (lastPlayedPositionPercentage < 97) { // If less than 97% of the audio was played
+            const resumeTime = audioRef.current.duration * (lastPlayedPositionPercentage / 100); // Calculate the time to resume
+            audioRef.current.currentTime = resumeTime; // Set the current time of the audio
+          }
+          
+        if (lastPlayedPositionPercentage < 97 && lastPlayedPositionPercentage > 0) {
+          // If less than 97% of the audio was played
+          setShowPlayButton(true); // Show the play button
+        } else {
+          setShowPlayButton(false); // Hide the play button
         }
-      } else {
-        console.error('Failed to fetch audio link:', response.status);
-      }
-    } catch (error) {
-      console.error('Error fetching audio link:', error);
-    }
-  };
+        } else {
+          console.error('Failed to fetch audio link:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching audio link:', error);
+      }  
+    };
+
+    fetchData1(); // Call the fetchData1 function when the component mounts
+
+    // };
+  }, []);
+
 
   const handleLoadedMetadata = async () => {
     if (isPlaying) {
+   
       audioRef.current.play();
     } else {
       // Set currentTime to last_played_position
@@ -66,28 +104,27 @@ function AudioPlayerMain() {
 
       try {
         // Fetch last_played_position
-        const userResponse = await fetch(`http://43.204.237.196:5000/api/exuser2/${user_id}`);
+        const userResponse = await fetch(`http://65.1.107.69:5000/api/exuser2/${user_id}`);
         const userData = await userResponse.json();
         const lastPlayedPositionPercentage = userData.last_played_position;
 
-        if (lastPlayedPositionPercentage < 97) { // If less than 97% of the audio was played
+        if (lastPlayedPositionPercentage == 0) { // If last_played_position is 0
+          startPlaying(); // Start playing automatically
+        } else if (lastPlayedPositionPercentage < 97) { // If less than 97% of the audio was played
           const resumeTime = audioRef.current.duration * (lastPlayedPositionPercentage / 100); // Calculate the time to resume
           audioRef.current.currentTime = resumeTime; // Set the current time of the audio
-        }
-         else {
+        } else {
           // If greater than or equal to 97, start the countdown
-          setCountdown(10); // Reset countdown to 10 seconds or your desired value
-          setIsPlaying(true);
+          // Reset countdown to 10 seconds or your desired value
+          setIsPlaying(false);
           // Start playing
-          setAudioEnded(true);  // Start playing
+          setAudioEnded(true);
         }
-      
       } catch (error) {
         console.error('Error fetching last played position:', error);
       }
     }
-};
-
+  };
   const handleAudioEnd = () => {
     console.log('Audio ended');
     setAudioEnded(true);
@@ -109,7 +146,7 @@ function AudioPlayerMain() {
     const user_id = Cookies.get('user_id');
     console.log("status updated")
     try {
-      const response = await fetch(`http://43.204.237.196:5000/api/exuser/${user_id}`, {
+      const response = await fetch(`http://65.1.107.69:5000/api/exuser/${user_id}`, {
         method: 'PUT',
       });
 
@@ -120,21 +157,23 @@ function AudioPlayerMain() {
       console.error('Error updating status:', error);
     }
   };
-
   const startPlaying = () => {
-    if (!audioRef.current.paused) {
-      return;
+    if (audioRef.current) { // Check if audioRef.current is not null
+      if (!audioRef.current.paused) {
+        return;
+      }
+      audioRef.current.muted = false;
+      audioRef.current.play();
+      setIsPlaying(true);
+      setGifKey(prevKey => prevKey + 1);
+      updateStatus();
     }
-    audioRef.current.play();
-    setIsPlaying(true);
-    setGifKey(prevKey => prevKey + 1);
-    updateStatus();
   };
 
   const updateLastPlayedPosition = async (percentage) => {
     const user_id = Cookies.get('user_id');
     try {
-      const response = await fetch(`http://43.204.237.196:5000/api/exuser1/${user_id}`, {
+      const response = await fetch(`http://65.1.107.69:5000/api/exuser1/${user_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -150,10 +189,6 @@ function AudioPlayerMain() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-    fetchData1();
-  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -177,6 +212,20 @@ function AudioPlayerMain() {
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata); // Remove the loadedmetadata event listener
     };
 }, []);
+useEffect(() => {
+  const delay = 5300; // Set the delay in milliseconds (adjust as needed)
+
+  if (!showPlayButton) { // Check if the play button is not visible
+    const timeoutId = setTimeout(() => {
+      startPlaying();
+    }, delay);
+
+    return () => {
+      clearTimeout(timeoutId); // Clear the timeout if the component unmounts before the delay is over
+    };
+  }
+}, [showPlayButton]);// Empty dependency array to run the effect only once when the component mounts
+
 
   useEffect(() => {
     let countdownInterval;
@@ -204,9 +253,12 @@ function AudioPlayerMain() {
       
       
     <div className="title-bar">
-      
-      
-        <h1>Audio Sessio Passage1</h1>
+      <div className="info-title">
+        <img src={logo} alt="GCC-TBC" />
+      </div>
+      <h1>
+        Audio Session Passage1
+      </h1>      
     </div>
     
     <div className="student-info">
@@ -225,9 +277,11 @@ function AudioPlayerMain() {
         <audio id="audio" ref={audioRef} src="" preload="metadata"></audio>
 
         <div className="audio-controls">
-          <div id="play-pause" className="play" onClick={startPlaying}>
-            {isPlaying ? '⏸️' : '▶️'}
-          </div>
+        {showPlayButton && (
+            <div id="play-pause" className="play" onClick={startPlaying}>
+              {isPlaying ? '⏸️' : '▶️'}
+            </div>
+          )}
           <div className="audio-progress">
             <progress id="progress-bar" max="100" value={percentage}></progress>
             <div id="percentage">{percentage}%</div>

@@ -15,7 +15,7 @@ function AudioPlayer() {
 
     useEffect(() => {
         const UserId =  Cookies.get('user_id'); // replace 'your_user_id' with the actual UserId
-        fetch(`http://43.204.237.196:5000/api/testaudio1/${UserId}`)
+        fetch(`http://65.1.107.69:5000/api/testaudio1/${UserId}`)
           .then(response => response.json())
           .then(data => {
            
@@ -71,7 +71,7 @@ function AudioPlayer() {
                   user_id: UserId,
                   information: `Proceed button clicked at ${dateTime}`
                 };
-                await fetch(`http://43.204.237.196:5000/api/testaudio`, {
+                await fetch(`http://65.1.107.69:5000/api/testaudio`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify(logInfo)
@@ -94,6 +94,9 @@ function AudioPlayer() {
             }
             
             setShowMessageBox(false); // Hide the message box while the audio is playing again
+            // Reload the page
+            window.location.reload();
+    
         }
         // No need to setShowMessageBox(true) here
     };
@@ -105,11 +108,11 @@ function AudioPlayer() {
             ) : (
                 showMessageBox ? (
                     <div className="message-box">
-                        <p>Did you hear that audio?</p>
-                        <div className="message-box-options">
-                            <button onClick={() => handleMessageBoxResponse('yes')}>Yes</button>
-                            <button onClick={() => handleMessageBoxResponse('no')}>No</button>
-                        </div>
+                    <p>Did you hear that audio?</p>
+                    <div className="message-box-options">
+                        <button onClick={() => handleMessageBoxResponse('yes')} className="yes-button">Yes</button>
+                        <button onClick={() => handleMessageBoxResponse('no')} className="no-button">No</button>
+                    </div>
                     </div>
                 ) : (
                     <div>
@@ -123,7 +126,12 @@ function AudioPlayer() {
                             </h1>
                         </div>
                         <div className="title-bar">
-                            <h1>Testing Audio Session</h1>
+                            <div className="info-title">
+                                <img src={logo} alt="GCC-TBC" />
+                            </div>
+                            <h1>
+                                Testing Audio Session
+                            </h1>
                         </div>
                         {/* ... (other components and JSX) */}
                         <div className="audio-player">

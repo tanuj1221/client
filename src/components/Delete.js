@@ -9,7 +9,7 @@ const DeleteUserDataButton = () => {
 
   const handleDeleteClick1 = async () => {
     try {
-      const response = await fetch(`http://43.204.237.196:5000/delete-user-data/${userId}`, {
+      const response = await fetch(`http://65.1.107.69:5000/delete-user-data/${userId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ const DeleteUserDataButton = () => {
 
   const handleDeleteClick = async () => {
     try {
-      const response = await fetch('http://43.204.237.196:5000/delete-all-user-data', {
+      const response = await fetch('http://65.1.107.69:5000/delete-all-user-data', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ const DeleteUserDataButton = () => {
 
   const handleDeleteClick2 = async () => {
     try {
-      const response = await fetch('http://43.204.237.196:5000/delete-all-user-percent', {
+      const response = await fetch('http://65.1.107.69:5000/delete-all-user-percent', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -68,16 +68,16 @@ const DeleteUserDataButton = () => {
   };
 
   return (
-    <div>
+    <div className="user-data-container">
       <button onClick={handleDeleteClick}>Delete Data for All Users</button>
 
-      <button onClick={handleDeleteClick2}>reset audio values</button>
-
+      <button onClick={handleDeleteClick2}>Reset Audio Values</button>
 
       <label>
         User ID:
         <input type="text" value={userId} onChange={handleUserIdChange} />
       </label>
+      
       <button onClick={handleDeleteClick1}>Delete Data for User</button>
     </div>
   );

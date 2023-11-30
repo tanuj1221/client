@@ -12,7 +12,7 @@ const Instructions = () => {
   
   useEffect(() => {
     const UserId =  Cookies.get('user_id'); // replace 'your_user_id' with the actual UserId
-    fetch(`http://43.204.237.196:5000/api/intro1/${UserId}`)
+    fetch(`http://65.1.107.69:5000/api/intro1/${UserId}`)
       .then(response => response.json())
       .then(data => {
         setExamInfo(data);
@@ -35,7 +35,7 @@ const Instructions = () => {
           user_id: UserId,
           information: `Proceed button clicked at ${dateTime}`
         };
-        await fetch(`http://43.204.237.196:5000/api/introlog`, {
+        await fetch(`http://65.1.107.69:5000/api/introlog`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(logInfo)

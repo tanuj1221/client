@@ -1,0 +1,236 @@
+/* CSV Import ============================*/
+.csv-import-container {
+    background-color: #ecf0f1; 
+    border-radius: 20px; 
+    padding: 20px; 
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    width: 30rem; /* Adjust to your needs */
+    text-align: center; 
+    margin: auto; 
+  }
+  
+  .csv-import-container h2,
+  .csv-import-container h3,
+  .csv-import-container p,
+  .csv-import-container label {
+    font-family: 'Roboto', sans-serif;
+    color: #2c3e50;
+  }
+  
+  .csv-import-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+  }
+  
+  .csv-import-container h3 {
+    font-size: 1.3em;
+    margin-top: 1em;
+  }
+  
+  .csv-import-container input[type="file"],
+  .csv-import-container input[type="text"] {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #bdc3c7;
+    margin-top: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .csv-import-container button {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #ffffff;
+    background-color: #3498db;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1em;
+    margin-top: 1em; 
+  }
+  
+  .csv-import-container button:hover {
+    background-color: #2980b9;
+  }
+  
+  .csv-import-container ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 1em;
+    text-align: left;
+  }
+  
+  .csv-import-container li {
+    padding: 5px 0;
+  }
+  
+  /* CSV Import end============================*/
+
+  /* Table Editor============================= */
+
+.table-editor-container {
+    background-color: #ecf0f1; 
+    border-radius: 20px; 
+    padding: 20px; 
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    width: 40rem; /* Adjust to your needs */
+    text-align: center; 
+    margin: auto; 
+  }
+  
+  .table-editor-container h2,
+  .table-editor-container h3,
+  .table-editor-container p,
+  .table-editor-container label {
+    font-family: 'Roboto', sans-serif;
+    color: #2c3e50;
+  }
+  
+  .table-editor-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+  }
+  
+  .table-editor-container h3 {
+    font-size: 1.3em;
+    margin-top: 1em;
+  }
+  
+  .table-editor-container select {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #bdc3c7;
+    margin-top: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .table-editor-container table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+  }
+  
+  .table-editor-container th,
+  .table-editor-container td {
+    border: 1px solid #bdc3c7;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .table-editor-container input[type="text"] {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #bdc3c7;
+    width: 100%;
+  }
+  
+  .table-editor-container button {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #ffffff;
+    background-color: #3498db;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1em;
+    margin: 1em;
+  }
+  
+  .table-editor-container button:hover {
+    background-color: #2980b9;
+  }
+  
+  .table-editor-container button:second-child {
+    background-color: #e74c3c;
+  }
+  
+  .table-editor-container button:second-child:hover {
+    background-color: #c0392b;
+  }
+  
+/* Table Editor end============================= */
+
+.csv-import-container,
+.table-editor-container {
+  background-color: #ecf0f1; 
+  border-radius: 20px; 
+  padding: 20px; 
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+  width: 30rem; /* Adjust to your needs */
+  text-align: center; 
+  margin: 20px auto; /* Adjust the first value to the desired top and bottom margin */
+}
+
+/* User add===================== */
+
+.user-data-container {
+    background-color: #ecf0f1; 
+    border-radius: 20px; 
+    padding: 20px; 
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    width: 30rem; /* Adjust to your needs */
+    text-align: center; 
+    margin: 20px auto; /* Adjust the first value to the desired top and bottom margin */
+  }
+  
+  .user-data-container label,
+  .user-data-container button {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #2c3e50;
+    margin-top: 1em;
+  }
+  
+  .user-data-container label input[type="text"] {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #bdc3c7;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
+  }
+  
+  .user-data-container button {
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1em;
+    margin: 10px; /* This will add a 10px gap between the buttons */
+  }
+  
+  .user-data-container button:first-child {
+    background-color: #3498db;
+  }
+  
+  .user-data-container button:first-child:hover {
+    background-color: #2980b9;
+  }
+  
+  .user-data-container button:nth-child(2) {
+    background-color: #2ecc71;
+  }
+  
+  .user-data-container button:nth-child(2):hover {
+    background-color: #27ae60;
+  }
+  
+  .user-data-container button:last-child {
+    background-color: #e74c3c;
+  }
+  
+  .user-data-container button:last-child:hover {
+    background-color: #c0392b;
+  }
+
+  /* User add end===================== */
+
+
+

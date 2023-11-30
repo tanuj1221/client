@@ -3,6 +3,7 @@ import '../audio-module.css';
 import visualGif from '../images/visual.gif';
 import Cookies from 'js-cookie';
 import ThankYouComponent from "./ThankYouComponent";
+import logo from '../images/GCC-TBC.png';
 
 function NewAudio() {
   const audioRef = useRef(null);
@@ -11,10 +12,46 @@ function NewAudio() {
   const [gifKey, setGifKey] = useState(0);
   const [audioEnded, setAudioEnded] = useState(false);
 
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    const playAudio = () => {
+ 
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            // Playback started successfully
+            setIsPlaying(true);
+          })
+          .catch(error => {
+            // Auto-play was prevented
+            setIsPlaying(false);
+            console.error('Auto-play prevented:', error);
+          });
+      }
+    };
+
+    audio.addEventListener('ended', () => {
+      setIsPlaying(false);
+      setAudioEnded(true);
+    });
+
+    playAudio();
+
+    return () => {
+      audio.removeEventListener('ended', () => {
+        setIsPlaying(false);
+        setAudioEnded(true);
+      });
+    };
+  }, []);
+
+
   const fetchData = async () => {
     try {
       const user_id = Cookies.get('user_id');
-      const response = await fetch(`http://43.204.237.196:5000/api/audio2/${user_id}`);
+      const response = await fetch(`http://65.1.107.69:5000/api/audio2/${user_id}`);
       console.log(response);
       if (response.ok) {
         const data = await response.json();
@@ -28,6 +65,10 @@ function NewAudio() {
       console.log('Error fetching audio link:', error);
     }
   };
+  useEffect(() => {
+    fetchData();
+    
+  }, []);
 
   const handleLoadedMetadata = async () => {
     if (isPlaying) {
@@ -35,30 +76,31 @@ function NewAudio() {
     } else {
       // Set currentTime to last_played_position
       const user_id = Cookies.get('user_id');
-
+  
       try {
         // Fetch last_played_position
-        const userResponse = await fetch(`http://43.204.237.196:5000/api/exuser3/${user_id}`);
+        const userResponse = await fetch(`http://65.1.107.69:5000/api/exuser3/${user_id}`);
         const userData = await userResponse.json();
         const lastPlayedPositionPercentage = userData.last_played_position2;
-
-        if (lastPlayedPositionPercentage < 97) { // If less than 97% of the audio was played
+        console.log("lat"+ userData.last_played_position2)
+  
+        if (lastPlayedPositionPercentage == 0) { // If last_played_position is 0
+          startPlaying(); // Start playing automatically
+        } else if (lastPlayedPositionPercentage < 97) { // If less than 97% of the audio was played
           const resumeTime = audioRef.current.duration * (lastPlayedPositionPercentage / 100); // Calculate the time to resume
           audioRef.current.currentTime = resumeTime; // Set the current time of the audio
-        }
-         else {
+        } else {
           // If greater than or equal to 97, start the countdown
-     // Reset countdown to 10 seconds or your desired value
+          // Reset countdown to 10 seconds or your desired value
           setIsPlaying(false);
           // Start playing
-          setAudioEnded(true);  // Start playing
+          setAudioEnded(true);
         }
-      
       } catch (error) {
         console.error('Error fetching last played position:', error);
       }
     }
-};
+  };
 const handleAudioEnd = () => {
   console.log('Audio ended');
   setAudioEnded(true);
@@ -79,7 +121,7 @@ const handleAudioEnd = () => {
     const user_id = Cookies.get('user_id');
     console.log("status updated")
     try {
-      const response = await fetch(`http://43.204.237.196:5000/api/exuser4/${user_id}`, {
+      const response = await fetch(`http://65.1.107.69:5000/api/exuser4/${user_id}`, {
         method: 'PUT',
       });
 
@@ -90,20 +132,22 @@ const handleAudioEnd = () => {
       console.error('Error updating status:', error);
     }
   };
-
   const startPlaying = () => {
-    if (!audioRef.current.paused) {
-      return;
+    if (audioRef.current) { // Check if audioRef.current is not null
+      if (!audioRef.current.paused) {
+        return;
+      }
+      audioRef.current.muted = false;
+      audioRef.current.play();
+      setIsPlaying(true);
+      setGifKey(prevKey => prevKey + 1);
+      updateStatus();
     }
-    audioRef.current.play();
-    setIsPlaying(true);
-    setGifKey(prevKey => prevKey + 1);
-    updateStatus();
   };
   const updateLastPlayedPosition = async (percentage) => {
     const user_id = Cookies.get('user_id');
     try {
-      const response = await fetch(`http://43.204.237.196:5000/api/exuser4/${user_id}`, {
+      const response = await fetch(`http://65.1.107.69:5000/api/exuser4/${user_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -118,10 +162,7 @@ const handleAudioEnd = () => {
       console.error('Error updating last played position:', error);
     }
   };
-  useEffect(() => {
-    fetchData();
-    
-  }, []);
+
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -145,6 +186,9 @@ const handleAudioEnd = () => {
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata); // Remove the loadedmetadata event listener
     };
 }, []);
+
+// Empty dependency array to run the effect only once when the component mounts
+
 useEffect(() => {
   if (audioEnded) {
     // Render NewAudio component when audio ends
@@ -159,7 +203,12 @@ if (audioEnded) {
   return (
     <div className="container">
       <div className="title-bar">
-        <h1>Audio Session passage 2</h1>
+        <div className="info-title">
+          <img src={logo} alt="GCC-TBC" />
+        </div>
+        <h1>
+          Audio Session Passage 2
+        </h1>     
       </div>
       <div className="student-info">
         <div className="student-photo">

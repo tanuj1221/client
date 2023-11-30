@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../admin.css';
 
 const CSVImport = () => {
   const [csvFile, setCSVFile] = useState(null);
@@ -10,7 +11,7 @@ const CSVImport = () => {
   useEffect(() => {
     const fetchTables = async () => {
       try {
-        const response = await axios.get('http://43.204.237.196:5000/api/tables');
+        const response = await axios.get('http://65.1.107.69:5000/api/tables');
         setTables(response.data.tables);
       } catch (error) {
         console.error('Error fetching tables:', error.message);
@@ -38,7 +39,7 @@ const CSVImport = () => {
       const formData = new FormData();
       formData.append('csvFilePath', csvFile);
 
-      const response = await axios.post(`http://43.204.237.196 :5000/api/import-csv/${tableName}`, formData);
+      const response = await axios.post(`http://65.1.107.69:5000/api/import-csv/${tableName}`, formData);
       setMessage(response.data.message);
       setTables((prevTables) => [...prevTables, tableName]); // Update the list of tables
     } catch (error) {
@@ -48,19 +49,23 @@ const CSVImport = () => {
   };
 
   return (
-    <div>
+    <div className="csv-import-container">
       <h2>CSV Import</h2>
+      
       <div>
         <label htmlFor="csvFile">Select CSV File:</label>
         <input type="file" id="csvFile" accept=".csv" onChange={handleFileChange} />
       </div>
+      
       <div>
         <label htmlFor="tableName">Table Name:</label>
         <input type="text" id="tableName" value={tableName} onChange={handleTableNameChange} />
       </div>
+      
       <button onClick={handleImportCSV}>Import CSV</button>
+      
       {message && <p>{message}</p>}
-
+      
       <div>
         <h3>Available Tables:</h3>
         <ul>
